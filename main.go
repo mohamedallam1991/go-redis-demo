@@ -10,7 +10,7 @@ import (
 	"github.com/mohamedallam1991/go-redis-demo/routing"
 )
 
-const port = ":7075"
+const port = ":8081"
 
 var app config.AppConfig
 

@@ -1,0 +1,11 @@
+
+services:
+  web:
+    build: .
+    ports:
+      - 8081:8081
+    environment:
+      PORT: 8081
+      RDIS_URL: redis
+  redis:
+    image:  redis:alpine
