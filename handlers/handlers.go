@@ -4,8 +4,10 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"os"
 
 	"github.com/go-chi/chi"
+	"github.com/go-redis/redis/v8"
 	"github.com/mohamedallam1991/go-redis-demo/checking"
 	"github.com/mohamedallam1991/go-redis-demo/config"
 	"github.com/mohamedallam1991/go-redis-demo/models"
@@ -49,13 +51,30 @@ func (m *Repository) Home(w http.ResponseWriter, r *http.Request) {
 	// render.RenderTemplate(w, "home.page.tmpl", &models.TemplateData{})
 }
 
+// var connection config.AppConfig
+// var connection resources.API
+
 func (m *Repository) All(w http.ResponseWriter, r *http.Request) {
-	// fmt.Println("from the all function")
 
 	q := chi.URLParam(r, "q")
 	fmt.Println("city name:", q)
 
-	data, err := resources.GetData(q)
+	redisAddress := fmt.Sprintf("%s:6379", os.Getenv("REDIS_URL"))
+
+	rdb := redis.NewClient(&redis.Options{
+		Addr:     redisAddress,
+		Password: "", // no password set
+		DB:       0,  // use default DB
+	})
+	var connection resources.API
+	connection.Cache = rdb
+
+	// app.UseCache = false
+	repo := resources.NewRepo(rdb)
+	resources.NewConnection(repo)
+	// resources.
+	// resources.API.GetData(&connection)
+	data, err := resources.TheAPI.GetData(q)
 	checking.Checking(err, "cant get the data")
 
 	resp := models.ApiResponse{

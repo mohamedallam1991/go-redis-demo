@@ -7,10 +7,28 @@ import (
 	"net/http"
 	"net/url"
 
+	"github.com/go-redis/redis/v8"
 	"github.com/mohamedallam1991/go-redis-demo/models"
 )
 
-func GetData(q string) ([]models.NominatimResponse, error) {
+// var Repo *Repository
+var TheAPI *API
+
+type API struct {
+	Cache *redis.Client
+}
+
+func NewRepo(a *redis.Client) *API {
+	return &API{
+		Cache: a,
+	}
+}
+
+func NewConnection(a *API) {
+	TheAPI = a
+}
+
+func (a *API) GetData(q string) ([]models.NominatimResponse, error) {
 	fmt.Println("from the data function")
 
 	espaceQ := url.PathEscape(q)
