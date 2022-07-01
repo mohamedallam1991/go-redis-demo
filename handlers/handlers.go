@@ -40,7 +40,7 @@ func (m *Repository) Home(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK)
 	w.Header().Set("Content-Type", "application/json")
 	resp := make(map[string]string)
-	resp["message"] = "Status its okay babe"
+	resp["message"] = "Status its okay for now, lets see"
 	resp["content"] = "Here goes our content"
 	jsonResp, err := json.Marshal(resp)
 	checking.Checking(err, "error in json unmarshling and marshling")
@@ -129,8 +129,10 @@ func connect() *redis.Client {
 			DB:       0,  // use default DB
 		}
 	} else {
-		redisUrl := `redis://:p5d63c80679f27374749b8fdde15820fb74f7da276e7c6eb5e5ac6dae4cfb61c3@ec2-100-26-75-186.compute-1.amazonaws.com:28639`
-		builtOpts, err := redis.ParseURL(redisUrl)
+		redisUrl := `redis://:p5d63c80679f27374749b8fdde15820fb74f7da276e7c6eb5e5ac6dae4cfb61c3@ec2-100-26-75-186.compute-1.amazonaws.com`
+		redisAddress := fmt.Sprintf("%s:28639", os.Getenv(redisUrl))
+
+		builtOpts, err := redis.ParseURL(redisAddress)
 		if err != nil {
 			panic(err)
 		}
