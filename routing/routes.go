@@ -16,6 +16,7 @@ func Routes(app *config.AppConfig) http.Handler {
 
 	mux.Get("/", handlers.Repo.Home)
 	mux.Get("/all/{q}", handlers.Repo.All)
+	mux.Get("/try/{q}", handlers.Repo.Try)
 	// mux.Get("/numbers/{id}", handlers.Repo.Numbers)
 
 	// fileServer := http.FileServer(http.Dir("./static/"))

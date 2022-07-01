@@ -69,12 +69,40 @@ func (m *Repository) All(w http.ResponseWriter, r *http.Request) {
 	var connection resources.API
 	connection.Cache = rdb
 
-	// app.UseCache = false
 	repo := resources.NewRepo(rdb)
 	resources.NewConnection(repo)
-	// resources.
-	// resources.API.GetData(&connection)
-	data, err := resources.TheAPI.GetData(q)
+	data, err := resources.TheAPI.GetData(r.Context(), q)
+	checking.Checking(err, "cant get the data")
+
+	resp := models.ApiResponse{
+		Cache: false,
+		Data:  data,
+	}
+
+	jsonResp, err := json.Marshal(resp)
+	checking.Checking(err, "error in json unmarshling and marshling")
+
+	w.Write(jsonResp)
+}
+
+func (m *Repository) Try(w http.ResponseWriter, r *http.Request) {
+
+	q := chi.URLParam(r, "q")
+	fmt.Println("city name:", q)
+
+	redisAddress := fmt.Sprintf("%s:6379", os.Getenv("REDIS_URL"))
+
+	rdb := redis.NewClient(&redis.Options{
+		Addr:     redisAddress,
+		Password: "", // no password set
+		DB:       0,  // use default DB
+	})
+	var connection resources.API
+	connection.Cache = rdb
+
+	repo := resources.NewRepo(rdb)
+	resources.NewConnection(repo)
+	data, err := resources.TheAPI.TryingCache(r.Context(), q)
 	checking.Checking(err, "cant get the data")
 
 	resp := models.ApiResponse{
