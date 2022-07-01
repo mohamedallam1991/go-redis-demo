@@ -129,7 +129,8 @@ func connect() *redis.Client {
 			DB:       0,  // use default DB
 		}
 	} else {
-		builtOpts, err := redis.ParseURL(os.Getenv("REDIS_URL"))
+		redisUrl := `redis://:p5d63c80679f27374749b8fdde15820fb74f7da276e7c6eb5e5ac6dae4cfb61c3@ec2-100-26-75-186.compute-1.amazonaws.com:28639`
+		builtOpts, err := redis.ParseURL(redisUrl)
 		if err != nil {
 			panic(err)
 		}
