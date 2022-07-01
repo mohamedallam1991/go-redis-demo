@@ -146,7 +146,8 @@ func connect() *redis.Client {
 	// Addr string
 
 	opts = &redis.Options{
-		Username: "redis",
+		// Username: "redis",
+		// PORT:     16529,
 		Addr:     "ec2-100-26-75-186.compute-1.amazonaws.com:16529",
 		Password: "p5d63c80679f27374749b8fdde15820fb74f7da276e7c6eb5e5ac6dae4cfb61c3", // no password set
 		DB:       0,                                                                   // use default DB
@@ -166,6 +167,8 @@ func connect() *redis.Client {
 	// }
 
 	rdb := redis.NewClient(opts)
+	fmt.Println("redis new client :", rdb)
+
 	return rdb
 
 	// return &resources.API{
