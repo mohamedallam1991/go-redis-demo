@@ -100,7 +100,9 @@ func (m *Repository) Try(w http.ResponseWriter, r *http.Request) {
 	var connection resources.API
 	connection.Cache = rdb
 
-	repo := resources.NewRepo(rdb)
+	raa := connect()
+	// repo := resources.NewRepo(rdb)
+	repo := resources.NewRepo(raa)
 	resources.NewConnection(repo)
 	data, err := resources.TheAPI.TryingCache(r.Context(), q)
 	checking.Checking(err, "cant get the data")
@@ -114,4 +116,30 @@ func (m *Repository) Try(w http.ResponseWriter, r *http.Request) {
 	checking.Checking(err, "error in json unmarshling and marshling")
 
 	w.Write(jsonResp)
+}
+
+func connect() *redis.Client {
+	var opts *redis.Options
+
+	if os.Getenv("LOCAL") == "true" {
+		redisAddress := fmt.Sprintf("%s:6379", os.Getenv("REDIS_URL"))
+		opts = &redis.Options{
+			Addr:     redisAddress,
+			Password: "", // no password set
+			DB:       0,  // use default DB
+		}
+	} else {
+		builtOpts, err := redis.ParseURL(os.Getenv("REDIS_URL"))
+		if err != nil {
+			panic(err)
+		}
+		opts = builtOpts
+	}
+
+	rdb := redis.NewClient(opts)
+	return rdb
+
+	// return &resources.API{
+	// 	cache: rdb,
+	// }
 }

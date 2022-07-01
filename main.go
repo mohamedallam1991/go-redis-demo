@@ -11,7 +11,7 @@ import (
 	"github.com/mohamedallam1991/go-redis-demo/routing"
 )
 
-const port = ":8081"
+// const port = ":8081"
 
 var app config.AppConfig
 
@@ -22,7 +22,7 @@ func main() {
 	repo := handlers.NewRepo(&app)
 	handlers.NewHandlers(repo)
 
-	fmt.Printf("starting the app %v", port)
+	fmt.Printf("starting the app %v", os.Getenv("PORT"))
 	portDock := fmt.Sprintf(":%s", os.Getenv("PORT"))
 
 	srv := &http.Server{
@@ -33,23 +33,3 @@ func main() {
 
 	checking.Checking(err, "fatal in main of the package")
 }
-
-// type ApiResponse struct {
-// 	Cache bool                   `json:"cache"`
-// 	Data  []TheNominatimResponse `json:"data"`
-// }
-
-// type TheNominatimResponse struct {
-// 	PlaceID     int      `json:"place_id"`
-// 	Licence     string   `json:"licence"`
-// 	OsmType     string   `json:"osm_type"`
-// 	OsmID       int      `json:"osm_id"`
-// 	Boundingbox []string `json:"boundingbox"`
-// 	Lat         string   `json:"lat"`
-// 	Lon         string   `json:"lon"`
-// 	DisplayName string   `json:"display_name"`
-// 	Class       string   `json:"class"`
-// 	Type        string   `json:"type"`
-// 	Importance  float64  `json:"importance"`
-// 	Icon        string   `json:"icon"`
-// }
