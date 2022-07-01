@@ -121,54 +121,23 @@ func (m *Repository) Try(w http.ResponseWriter, r *http.Request) {
 func connect() *redis.Client {
 	var opts *redis.Options
 
-	// if os.Getenv("LOCAL") == "true" {
-	// 	redisuri := os.Getenv("REDIS_URL")
-	// 	fmt.Println("redisuri :", redisuri)
-
-	// 	redisAddress := fmt.Sprintf("%s:6379", redisuri)
-	// 	fmt.Println("redisAddress :", redisAddress)
-
-	// 	// fmt.Println("Redis address :", redisAddress)
-	// 	// fmt.Println("redis address :", redis:6379)
-
-	// 	opts = &redis.Options{
-	// 		Addr:     redisAddress,
-	// 		Password: "", // no password set
-	// 		DB:       0,  // use default DB
-	// 	}
-	// 	fmt.Println("builtOpts :", opts)
-
-	// } else {
-	// redisUri := `redis://:p5d63c80679f27374749b8fdde15820fb74f7da276e7c6eb5e5ac6dae4cfb61c3@ec2-100-26-75-186.compute-1.amazonaws.com:16529:6379`
-	// redisUri := `rediss://:p5d63c80679f27374749b8fdde15820fb74f7da276e7c6eb5e5ac6dae4cfb61c3@ec2-100-26-75-186.compute-1.amazonaws.com:16530`
-	// redisUri := "redis://:@:16529"
-	// host:port address.
-	// Addr string
-
-	opts = &redis.Options{
-		// Username: "redis",
-		// PORT:     16529,
-		Addr:     "ec2-100-26-75-186.compute-1.amazonaws.com:16529",
-		Password: "p5d63c80679f27374749b8fdde15820fb74f7da276e7c6eb5e5ac6dae4cfb61c3", // no password set
-		DB:       0,                                                                   // use default DB
+	if os.Getenv("LOCAL") == "true" {
+		redisAddress := fmt.Sprintf("%s:6379", os.Getenv("REDIS_URL"))
+		opts = &redis.Options{
+			Addr:     redisAddress,
+			Password: "", // no password set
+			DB:       0,  // use default DB
+		}
+	} else {
+		// redis://:p5d63c80679f27374749b8fdde15820fb74f7da276e7c6eb5e5ac6dae4cfb61c3@ec2-100-26-75-186.compute-1.amazonaws.com:16529:6379:
+		builtOpts, err := redis.ParseURL(os.Getenv("REDIS_URL"))
+		if err != nil {
+			panic(err)
+		}
+		opts = builtOpts
 	}
 
-	// builtOpts, err := redis.ParseURL(redisUri)
-	// if err != nil {
-	// 	panic(err)
-	// }
-	fmt.Println("builtOpts :", opts)
-
-	// builtOpts, err := redis.ParseURL(os.Getenv("RZEDIS_URL"))
-	// if err != nil {
-	// 	panic(err)
-	// }
-	// opts = builtOpts
-	// }
-
 	rdb := redis.NewClient(opts)
-	fmt.Println("redis new client :", rdb)
-
 	return rdb
 
 	// return &resources.API{
