@@ -139,21 +139,28 @@ func connect() *redis.Client {
 		fmt.Println("builtOpts :", opts)
 
 	} else {
-		redisUri := `redis://:p5d63c80679f27374749b8fdde15820fb74f7da276e7c6eb5e5ac6dae4cfb61c3@ec2-100-26-75-186.compute-1.amazonaws.com:16529:6379`
-		// redisUri = `redis://:p5d63c80679f27374749b8fdde15820fb74f7da276e7c6eb5e5ac6dae4cfb61c3@ec2-100-26-75-186.compute-1.amazonaws.com:16529`
+		// redisUri := `redis://:p5d63c80679f27374749b8fdde15820fb74f7da276e7c6eb5e5ac6dae4cfb61c3@ec2-100-26-75-186.compute-1.amazonaws.com:16529:6379`
+		// redisUri := `rediss://:p5d63c80679f27374749b8fdde15820fb74f7da276e7c6eb5e5ac6dae4cfb61c3@ec2-100-26-75-186.compute-1.amazonaws.com:16530`
+		redisUri := `redis://:p5d63c80679f27374749b8fdde15820fb74f7da276e7c6eb5e5ac6dae4cfb61c3@ec2-100-26-75-186.compute-1.amazonaws.com:16529`
 		// redis://:p5d63c80679f27374749b8fdde15820fb74f7da276e7c6eb5e5ac6dae4cfb61c3@ec2-100-26-75-186.compute-1.amazonaws.com:16529:6379:
-		fmt.Println("redisUri :", redisUri)
-
+		// fmt.Println("redisUri :", redisUri)
 		// redisAddress := fmt.Sprintf("%s:6379", redisUri)
 		// fmt.Println("redisAddress :", redisAddress)
 
-		builtOpts, err := redis.ParseURL(redisUri)
-		fmt.Println("builtOpts :", builtOpts)
+		// redisAddress := fmt.Sprintf("%s:6379", redisUri)
+		// fmt.Println("redisAddress :", redisAddress)
+		//redis://<user>:<password>@<host>:<port>/<db_number>
 
-		// builtOpts, err := redis.ParseURL(os.Getenv("RZEDIS_URL"))
+		builtOpts, err := redis.ParseURL(redisUri)
 		if err != nil {
 			panic(err)
 		}
+		fmt.Println("builtOpts :", opts)
+
+		// builtOpts, err := redis.ParseURL(os.Getenv("RZEDIS_URL"))
+		// if err != nil {
+		// 	panic(err)
+		// }
 		opts = builtOpts
 	}
 
