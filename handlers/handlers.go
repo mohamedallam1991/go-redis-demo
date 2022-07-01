@@ -40,7 +40,7 @@ func (m *Repository) Home(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK)
 	w.Header().Set("Content-Type", "application/json")
 	resp := make(map[string]string)
-	resp["message"] = "Status its okay nigga"
+	resp["message"] = "Status its okay babe"
 	resp["content"] = "Here goes our content"
 	jsonResp, err := json.Marshal(resp)
 	checking.Checking(err, "error in json unmarshling and marshling")
@@ -90,15 +90,15 @@ func (m *Repository) Try(w http.ResponseWriter, r *http.Request) {
 	q := chi.URLParam(r, "q")
 	fmt.Println("city name:", q)
 
-	redisAddress := fmt.Sprintf("%s:6379", os.Getenv("REDIS_URL"))
+	// redisAddress := fmt.Sprintf("%s:6379", os.Getenv("REDIS_URL"))
 
-	rdb := redis.NewClient(&redis.Options{
-		Addr:     redisAddress,
-		Password: "", // no password set
-		DB:       0,  // use default DB
-	})
-	var connection resources.API
-	connection.Cache = rdb
+	// rdb := redis.NewClient(&redis.Options{
+	// 	Addr:     redisAddress,
+	// 	Password: "", // no password set
+	// 	DB:       0,  // use default DB
+	// })
+	// var connection resources.API
+	// connection.Cache = rdb
 
 	raa := connect()
 	// repo := resources.NewRepo(rdb)
