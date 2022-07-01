@@ -123,6 +123,8 @@ func connect() *redis.Client {
 
 	if os.Getenv("LOCAL") == "true" {
 		redisuri := os.Getenv("REDIS_URL")
+		fmt.Println("redisuri :", redisuri)
+
 		redisAddress := fmt.Sprintf("%s:6379", redisuri)
 		fmt.Println("redisAddress :", redisAddress)
 
@@ -141,10 +143,10 @@ func connect() *redis.Client {
 		// redis://:p5d63c80679f27374749b8fdde15820fb74f7da276e7c6eb5e5ac6dae4cfb61c3@ec2-100-26-75-186.compute-1.amazonaws.com:16529:6379:
 		fmt.Println("redisUri :", redisUri)
 
-		redisAddress := fmt.Sprintf("%s:6379", os.Getenv(redisUri))
+		redisAddress := fmt.Sprintf("%s:6379", redisUri)
 		fmt.Println("redisAddress :", redisAddress)
 
-		builtOpts, err := redis.ParseURL(os.Getenv(redisAddress))
+		builtOpts, err := redis.ParseURL(redisAddress)
 		fmt.Println("builtOpts :", builtOpts)
 
 		// builtOpts, err := redis.ParseURL(os.Getenv("RZEDIS_URL"))
