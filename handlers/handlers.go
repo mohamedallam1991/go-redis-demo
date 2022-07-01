@@ -40,7 +40,7 @@ func (m *Repository) Home(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK)
 	w.Header().Set("Content-Type", "application/json")
 	resp := make(map[string]string)
-	resp["message"] = "Status its okay for now, lets see"
+	resp["message"] = "Status its okay babe"
 	resp["content"] = "Here goes our content"
 	jsonResp, err := json.Marshal(resp)
 	checking.Checking(err, "error in json unmarshling and marshling")
@@ -122,17 +122,32 @@ func connect() *redis.Client {
 	var opts *redis.Options
 
 	if os.Getenv("LOCAL") == "true" {
-		redisAddress := fmt.Sprintf("%s:6379", os.Getenv("REDIS_URL"))
+		redisuri := os.Getenv("REDIS_URL")
+		redisAddress := fmt.Sprintf("%s:6379", redisuri)
+		fmt.Println("redisAddress :", redisAddress)
+
+		// fmt.Println("Redis address :", redisAddress)
+		// fmt.Println("redis address :", redis:6379)
+
 		opts = &redis.Options{
 			Addr:     redisAddress,
 			Password: "", // no password set
 			DB:       0,  // use default DB
 		}
-	} else {
-		redisUrl := `redis://:p5d63c80679f27374749b8fdde15820fb74f7da276e7c6eb5e5ac6dae4cfb61c3@ec2-100-26-75-186.compute-1.amazonaws.com`
-		redisAddress := fmt.Sprintf("%s:28639", os.Getenv(redisUrl))
+		fmt.Println("builtOpts :", opts)
 
-		builtOpts, err := redis.ParseURL(redisAddress)
+	} else {
+		redisUri := `redis://:p5d63c80679f27374749b8fdde15820fb74f7da276e7c6eb5e5ac6dae4cfb61c3@ec2-100-26-75-186.compute-1.amazonaws.com:16529`
+		// redis://:p5d63c80679f27374749b8fdde15820fb74f7da276e7c6eb5e5ac6dae4cfb61c3@ec2-100-26-75-186.compute-1.amazonaws.com:16529:6379:
+		fmt.Println("redisUri :", redisUri)
+
+		redisAddress := fmt.Sprintf("%s:6379", os.Getenv(redisUri))
+		fmt.Println("redisAddress :", redisAddress)
+
+		builtOpts, err := redis.ParseURL(os.Getenv(redisAddress))
+		fmt.Println("builtOpts :", builtOpts)
+
+		// builtOpts, err := redis.ParseURL(os.Getenv("RZEDIS_URL"))
 		if err != nil {
 			panic(err)
 		}
