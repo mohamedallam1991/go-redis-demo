@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"net/http"
+	"os"
 
 	"github.com/mohamedallam1991/go-redis-demo/checking"
 	"github.com/mohamedallam1991/go-redis-demo/config"
@@ -22,9 +23,10 @@ func main() {
 	handlers.NewHandlers(repo)
 
 	fmt.Printf("starting the app %v", port)
+	portDock := fmt.Sprintf(":%s", os.Getenv("PORT"))
 
 	srv := &http.Server{
-		Addr:    port,
+		Addr:    portDock,
 		Handler: routing.Routes(&app),
 	}
 	err := srv.ListenAndServe()
